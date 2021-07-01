@@ -14,14 +14,14 @@ class Start:
         background = "#D4E1F5"
 
         # God Quiz Heading (row 0)
-        self.egyptian_god_label = Label(self.start_frame, text="Egyptian God Quiz",
-                                       font="Arial 16 bold", bg=background)
+        self.egyptian_god_label = Label(self.start_frame, text="Egyptian Gods Quiz",
+                                        font="Arial 15 bold", bg="#D4E1F5")
         self.egyptian_god_label.grid(row=0)
 
         # Initial instructions (row 1)
         self.god_instructions_label = Label(self.start_frame, text=" Please choose the amount of "
                                                                  "question you want to answer",
-                                          font="Arial 8 italic", fg="black", bg=background)
+                                          font="Arial 12 italic", fg="black", bg=background)
         self.god_instructions_label.grid(row=1)
 
         # to_quiz button frame
@@ -33,7 +33,7 @@ class Start:
         self.level_frame.grid(row=3)
 
         # Button Font
-        button_font = "Oswald 12 bold"
+        button_font = "Oswald 40 bold"
 
         # Low Questions Button
         self.low_level_button = Button(self.level_frame, text="10",
@@ -90,12 +90,12 @@ class Game:
         self.game_frame.grid()
 
         # Label for the quiz
-        self.egyptian_god_label = Label(self.game_frame, text="?",
+        self.egyptian_god_label = Label(self.game_frame, text="Egyptian Gods Quiz",
                                    font="Arial 15")
         self.egyptian_god_label.grid(row=0)
 
         # Label showing answer
-        self.answer_label = Label(self.game_frame, text="", font="Arial 15")
+        self.answer_label = Label(self.game_frame, text="Egyptian Gods Quiz", font="Arial 15")
         self.answer_label.grid(row=1)
 
         # Setup grid for answer buttons row 3
@@ -104,33 +104,33 @@ class Game:
 
         # Top level button
         self.top_left_button = Button(self.answers_frame, text="",
-                                      font="Arial 15", padx=5, pady=5, width=40,
+                                      font="Arial 15", width=35, bg="black", fg="yellow",
                                       command=lambda: self.reveal_answer(self.top_left))
-        self.top_left_button.grid(column=0, row=0)
+        self.top_left_button.grid(column=0, row=0, padx=5, pady=5)
 
         self.top_right_button = Button(self.answers_frame, text="",
-                                      font="Arial 15", padx=5, pady=5, width=40,
+                                      font="Arial 15", width=35, bg="black", fg="yellow",
                                       command=lambda: self.reveal_answer(self.top_right))
         self.top_right_button.grid(column=1, row=0)
 
         # Bottom level button
         self.bottom_left_button = Button(self.answers_frame, text="",
-                                      font="Arial 15", padx=5, pady=5, width=40,
+                                      font="Arial 15", width=35, bg="black", fg="yellow",
                                       command=lambda: self.reveal_answer(self.bottom_left))
         self.bottom_left_button.grid(column=0, row=1)
 
         self.bottom_right_button = Button(self.answers_frame, text="",
-                                      font="Arial 15", padx=5, pady=5, width=40,
+                                      font="Arial 15", width=35, bg="black", fg="yellow",
                                       command=lambda: self.reveal_answer(self.bottom_right))
         self.bottom_right_button.grid(column=1, row=1)
 
         # Label for results
-        self.result_label = Label(self.game_box, text="{} correct / {} roundsplayed".format(self.result,
+        self.result_label = Label(self.game_box, font="Arial 14 bold", fg="black", text="{} correct / {} games played".format(self.result,
                                                                                             self.rounds_played))
-        self.result_label.grid(row=4)
+        self.result_label.grid(row=4, column=0)
 
         # Next button
-        self.next_button = Button(self.game_box, width=10, height=1, text="next",
+        self.next_button = Button(self.game_box, width=10, height=1, text="next", background="black", fg="yellow",
                                   command=lambda:self.to_next(my_list))
         self.next_button.grid(row=6, column=0, pady=2)
 
@@ -213,18 +213,20 @@ class Game:
         self.bottom_right_button.config(text=self.bottom_right, command=lambda:
         self.reveal_answer(self.bottom_right))
 
-        # Help and Game Stats button (row 5)
-        self.start_help_frame = Frame(self.game_frame, pady=10)
-        self.start_help_frame.grid(row=5)
+
+
+        # stats frame
+        self.help_stats_frame = Frame(self.game_box)
+        self.help_stats_frame.grid(row=5)
 
         # Help and statistics buttons
-        self.start_help_button = Button(self.start_help_frame, text="Help/Rules",
+        self.start_help_button = Button(self.help_stats_frame, text="Help/Rules",
                                         font="Arial 15 bold",
                                         bg="black", fg="white",
                                         command=self.to_help)
         self.start_help_button.grid(row=1, column=1)
 
-        self.start_statistics_button = Button(self.start_help_frame, text="Statistics / Export",
+        self.start_statistics_button = Button(self.help_stats_frame, text="Statistics / Export",
                                               font="Arial 15 bold",
                                               bg="white", fg="black",
                                               command=lambda: self.to_stats(self.rounds_played,
@@ -232,13 +234,12 @@ class Game:
         self.start_statistics_button.grid(row=1, column=2, padx=2)
 
         # Quit Button
-        self.quit_button = Button(self.game_frame, text="Quit", fg="white",
+        self.quit_button = Button(self.game_box, text="Quit", fg="white",
                                   bg="red", font="Arial 12 bold", width=3, height=1,
                                   command=self.to_quit, padx=10, pady=10)
         self.quit_button.grid(row=10, pady=10)
 
         # Quit function
-
     def to_quit(self):
         root.destroy()
 
