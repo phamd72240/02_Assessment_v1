@@ -129,18 +129,16 @@ class Game:
                                                                                             self.rounds_played))
         self.result_label.grid(row=4)
 
-        # Help button
-        self.help_button = Button(self.game_box, width=10, height=1, text="help", command=lambda:self.to_help)
-        self.help_button.grid(row=5, column=0, pady=2)
-
         # Next button
-        self.next_button = Button(self.game_box, width=10, height=1, text="next", command=lambda:self.to_next(my_list))
+        self.next_button = Button(self.game_box, width=10, height=1, text="next",
+                                  command=lambda:self.to_next(my_list))
         self.next_button.grid(row=6, column=0, pady=2)
 
         # Disable the next button
         self.next_button.config(state=DISABLED)
         self.to_next(my_list)
 
+    # check answer
     def reveal_answer(self, location):
 
         # Disable all the buttons
@@ -166,6 +164,8 @@ class Game:
         self.result_label.config(text="{} correct / {} roundsplayed".format(self.result, self.rounds_played))
 
         # To Next defined
+
+    # the next function
     def to_next(self, list):
         self.top_left_button.config(state=NORMAL)
         self.top_right_button.config(state=NORMAL)
@@ -212,6 +212,81 @@ class Game:
 
         self.bottom_right_button.config(text=self.bottom_right, command=lambda:
         self.reveal_answer(self.bottom_right))
+
+        # Help and Game Stats button (row 5)
+        self.start_help_frame = Frame(self.game_frame, pady=10)
+        self.start_help_frame.grid(row=5)
+
+        # Help and statistics buttons
+        self.start_help_button = Button(self.start_help_frame, text="Help/Rules",
+                                        font="Arial 15 bold",
+                                        bg="black", fg="white",
+                                        command=self.to_help)
+        self.start_help_button.grid(row=1, column=1)
+
+        self.start_statistics_button = Button(self.start_help_frame, text="Statistics / Export",
+                                              font="Arial 15 bold",
+                                              bg="white", fg="black",
+                                              command=lambda: self.to_stats(self.rounds_played,
+                                                                            self.game_stats_list))
+        self.start_statistics_button.grid(row=1, column=2, padx=2)
+
+        # Quit Button
+        self.quit_button = Button(self.game_frame, text="Quit", fg="white",
+                                  bg="red", font="Arial 12 bold", width=3, height=1,
+                                  command=self.to_quit, padx=10, pady=10)
+        self.quit_button.grid(row=10, pady=10)
+
+        # Quit function
+
+    def to_quit(self):
+        root.destroy()
+
+    # help function
+    def to_help(self):
+        get_help = Help(self)
+        get_help.help_text.configure(text="The quiz generate a description of a random egyptian god." \
+                                          "Try to find out which god it is, you get 4 options." \
+                                          "Try to get the most amount of questions right!!"
+                                          "May Shai bless you in your endeavour.")
+
+
+class Help:
+    def __init__(self, partner):
+        # disable help button
+        partner.start_help_button.config(state=DISABLED)
+
+        # Sets up child window (ie: help box)
+        self.help_box = Toplevel()
+
+        # If users press 'x' cross at the top, closes help and 'releases' help button.
+        self.help_box.protocol('WM_DELETE_WINDOW', partial(self.close_help, partner))
+
+        # Set up GUI Frame
+        self.help_frame = Frame(self.help_box)
+        self.help_frame.grid()
+
+        # Set up Help heading (row 0)
+        self.how_heading = Label(self.help_frame, text="Help / Instructions",
+                                 font="Arial 15 bold")
+        self.how_heading.grid(row=0)
+
+        # Help text (label, row 1)
+        self.help_text = Label(self.help_frame, text="",
+                               justify=LEFT, width=40, wrap=250)
+        self.help_text.grid(row=1)
+
+        # Dismiss button (row 2)
+        self.dismiss_btn = Button(self.help_frame, text="Dismiss", width=10, bg="green",
+                                  fg="white",
+                                  font="arial" "10" "bold",
+                                  command=partial(self.close_help, partner))
+        self.dismiss_btn.grid(row=2, pady=10)
+
+    def close_help(self, partner):
+        # Put help button back to normal...
+        partner.start_help_button.config(state=NORMAL)
+        self.help_box.destroy()
 
 
 # main routine
