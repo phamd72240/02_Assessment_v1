@@ -1,7 +1,7 @@
 from tkinter import *
 from functools import partial
 import re
-import random
+
 
 class Start:
     def __init__(self):

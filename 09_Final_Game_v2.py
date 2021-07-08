@@ -1,11 +1,12 @@
 from tkinter import *
 from functools import partial  # Prevent unwanted windows
 import csv
+import re
 import random
 
 
 class Start:
-    def __init__(self, partner):
+    def __init__(self, partner, ):
         # Start GUI
         self.start_frame = Frame(padx=10, pady=10, bg="#D4E1F5")
         self.start_frame.grid()
@@ -27,6 +28,10 @@ class Start:
         # to_quiz button frame
         self.to_quiz_frame = Frame(self.start_frame, bg=background)
         self.to_quiz_frame.grid(row=2)
+
+        # to_stat button frame
+        self.to_stat_frame = Frame(self.start_frame, bg=background)
+        self.to_stat_frame.grid(row=2)
 
         # Buttons frame ( row 3)
         self.level_frame = Frame(self.start_frame, bg=background)
@@ -61,7 +66,6 @@ class Start:
 
     def to_quiz(self, level):
         Game(self, level)
-
 
 class Game:
     def __init__(self, partner, level):
@@ -127,9 +131,9 @@ class Game:
         self.bottom_right_button.grid(column=1, row=1)
 
         # Label for results
-        self.result_label = Label(self.game_box, font="Arial 14 bold", fg="black", text="{} correct / {} games played"
-                                  .format(self.result, self.rounds_played))
-
+        self.result_label = Label(self.game_box, font="Arial 14 bold", fg="black",
+                                  text="{} correct / {} games played".format(self.result,
+                                                                             self.rounds_played))
         self.result_label.grid(row=4, column=0)
 
         # Next button
@@ -164,9 +168,10 @@ class Game:
             self.answer_label.config(text="Maybe Next Time??", fg="#0000FF")
 
         # refreshed result after right or wrong
-        self.result_label.config(text="{} correct / {} rounds played".format(self.result, self.rounds_played))
+        self.result_label.config(text="{} correct / {} roundsplayed".format(self.result, self.rounds_played))
 
-    # To Next defined
+        # To Next defined
+
     # the next function
     def to_next(self, list):
         self.top_left_button.config(state=NORMAL)
@@ -222,36 +227,50 @@ class Game:
         # Help and statistics buttons
         self.start_help_button = Button(self.help_stats_frame, text="Help/Rules",
                                         font="Arial 15 bold",
-                                        bg="black", fg="yellow", width=20,
+                                        bg="black", fg="white", width=20,
                                         command=self.to_help)
         self.start_help_button.grid(row=1, column=1)
 
-        self.start_statistics_button = Button(self.help_stats_frame, text="Statistics",
+        self.start_statistics_button = Button(self.help_stats_frame, text="Statistics / Export",
                                               font="Arial 15 bold",
-                                              bg="black", fg="yellow", width=20,
-                                              command=self.to_stats)
+                                              bg="black", fg="white", width=20,
+                                              command=lambda: self.to_stats(self.rounds_played,
+                                                                           self.game_stat_list))
         self.start_statistics_button.grid(row=1, column=2, padx=10)
 
         # Quit Button
         self.quit_button = Button(self.game_box, text="Quit", fg="white",
-                                  bg="red", font="Arial 15 bold", width=15, height=1,
+                                  bg="red", font="Arial 12 bold", width=15, height=1,
                                   command=self.to_quit)
         self.quit_button.grid(row=10)
 
-        # This color is black
+    # Statistics & Export
+    def to_stats(self, level):
+        Game(self, level)
+        # color for background
         background_color = "black"
 
         self.all_calc_list = []
 
-        # history Button (row 1)
-        self.history_button = Button(self.help_stats_frame, text="Egyptian God Quiz Export", fg="yellow",
-                                     font="Arial 12 bold", width=20, height=2,
-                                     bg=background_color, command=lambda: self.history(self.all_calc_list))
-        self.history_button.grid(row=1, padx=10, pady=10)
+        # Egyptian god quiz main Screen GUI...
+        self.to_stats_frame = Frame(width=300, height=300, bg=background_color,
+                                    pady=10)
+        self.to_stats_frame.grid()
 
-    # History function
-    def history(self, calc_history):
-        History(self, calc_history)
+        # Temperature Conversion Heading (row 0)
+        self.Egyptian_God_Quiz_label = Label(self.to_stats_frame, text="Egyptian God Quiz", fg="yellow",
+                                             font=("Arial", "16", "bold"),
+                                             bg=background_color,
+                                             padx=10, pady=10)
+        self.Egyptian_God_Quiz_label.grid(row=0)
+
+        # history Button (row 1)
+        self.history_button = Button(self.to_stats_frame, text="Information", fg="yellow",
+                                     font=("Arial", "8", "bold"),
+                                     bg=background_color,
+                                     padx=10, pady=10,
+                                     command=lambda: self.history(self.all_calc_list))
+        self.history_button.grid(row=1)
 
     # Quit function
     def to_quit(self):
@@ -265,16 +284,8 @@ class Game:
                                           "Try to get the most amount of questions right!!"
                                           "May Shai bless you in your endeavour.")
 
-    def to_stats(self):
-        get_stats = Stats(self)
-        get_stats.stats_text.configure(text="This is your statistics")
-
-
 class Help:
     def __init__(self, partner):
-        # The color is black
-        background = "black"
-
         # disable help button
         partner.start_help_button.config(state=DISABLED)
 
@@ -285,22 +296,22 @@ class Help:
         self.help_box.protocol('WM_DELETE_WINDOW', partial(self.close_help, partner))
 
         # Set up GUI Frame
-        self.help_frame = Frame(self.help_box, bg=background)
+        self.help_frame = Frame(self.help_box)
         self.help_frame.grid()
 
         # Set up Help heading (row 0)
-        self.how_heading = Label(self.help_frame, text="Help / Instructions", fg="yellow", bg=background,
+        self.how_heading = Label(self.help_frame, text="Help / Instructions",
                                  font="Arial 15 bold")
         self.how_heading.grid(row=0)
 
         # Help text (label, row 1)
-        self.help_text = Label(self.help_frame, text="", fg="yellow", bg=background,
+        self.help_text = Label(self.help_frame, text="",
                                justify=LEFT, width=40, wrap=250)
         self.help_text.grid(row=1)
 
         # Dismiss button (row 2)
-        self.dismiss_btn = Button(self.help_frame, text="Dismiss", width=10, bg="black",
-                                  fg="yellow",
+        self.dismiss_btn = Button(self.help_frame, text="Dismiss", width=10, bg="green",
+                                  fg="white",
                                   font="arial" "10" "bold",
                                   command=partial(self.close_help, partner))
         self.dismiss_btn.grid(row=2, pady=10)
@@ -310,74 +321,11 @@ class Help:
         partner.start_help_button.config(state=NORMAL)
         self.help_box.destroy()
 
-
-class Stats:
-    def __init__(self, partner):
-        print(Stats)
-
-        # The color is black
-        background = "black"
-
-        # result (big thanks to yichen for giving me this idea)
-        self.result = partner.result
-
-        # Amounts of game (big thanks to yichen for giving me this idea)
-        self.rounds_played = partner.rounds_played
-
-        # disable stats button
-        partner.start_statistics_button.config(state=DISABLED)
-
-        # Sets up child window (ie: stats box)
-        self.stats_box = Toplevel()
-
-        # If users press 'x' cross at the top, closes stats and 'releases' stats button.
-        self.stats_box.protocol('WM_DELETE_WINDOW', partial(self.close_stats, partner))
-
-        # Set up GUI Frame
-        self.stats_frame = Frame(self.stats_box, bg=background)
-        self.stats_frame.grid()
-
-        # Set up Help heading (row 0)
-        self.stats_heading_label = Label(self.stats_frame, text="Game Statistics", bg="black", fg="yellow",
-                                         font="Arial 19 bold")
-        self.stats_heading_label.grid(row=0)
-
-        # Stats text (label, row 1)
-        self.stats_text = Label(self.stats_frame, text="", bg="black", fg="yellow",
-                                justify=LEFT, width=40, wrap=250)
-        self.stats_text.grid(row=1)
-
-        # Dismiss button (row 2)
-        self.dismiss_btn = Button(self.stats_frame, text="Dismiss", width=10, bg="black",
-                                  fg="yellow",
-                                  font="arial" "10" "bold",
-                                  command=partial(self.close_stats, partner))
-        self.dismiss_btn.grid(row=2, pady=10)
-
-        # Label for results
-        self.result_label = Label(self.stats_frame, font="Arial 14 bold", fg="yellow", bg="black",
-                                  text="{} correct / {} rounds played".format(self.result,
-                                                                              self.rounds_played))
-        self.result_label.grid(row=4, column=0)
-
-        # refreshed result after right or wrong
-        self.result_label.config(text="{} correct / {} rounds played".format(self.result, self.rounds_played))
-
-    def close_stats(self, partner):
-        # Put help button back to normal...
-        partner.start_statistics_button.config(state=NORMAL)
-        self.stats_box.destroy()
-
+    def history(self, calc_history):
+        History(self, calc_history)
 
 class History:
     def __init__(self, partner, calc_history):
-
-        # result (big thanks to yichen for giving me this idea)
-        self.result = partner.result
-
-        # Amounts of game (big thanks to yichen for giving me this idea)
-        self.rounds_played = partner.rounds_played
-
         # This color is black
         background = "black"
 
@@ -406,21 +354,16 @@ class History:
                                   justify=LEFT, width=40, bg=background, wrap=250, padx=10, pady=10)
         self.history_text.grid(row=1)
 
-        # Label for results
-        self.result_label = Label(self.history_frame, font="Arial 14 bold", fg="yellow", bg="black",
-                                  text="{} correct / {} rounds played".format(self.result,
-                                                                              self.rounds_played))
-        self.result_label.grid(row=4, column=0)
-
-        # refreshed result after right or wrong
-        self.result_label.config(text="{} correct / {} rounds played".format(self.result, self.rounds_played))
-
         # history Output goes here... (Row 2)
+
         # Generate string from list of calcualtions...
+
         history_string = ""
         if len(calc_history) >= 7:
             for item in range(0, 7):
                 history_string += calc_history[lens(calc_history) - item - 1] + "\n"
+
+
         else:
             for item in calc_history:
                 history_string += calc_history[len(calc_history) -
@@ -428,6 +371,7 @@ class History:
                 self.history_text.config(text="Here are your most recent calculations ", fg="yellow")
 
         # Export /Dismiss Buttons Frame (row 3)
+
         self.export_dismiss_frame = Frame(self.history_frame)
         self.export_dismiss_frame.grid(row=3, pady=10)
 
@@ -449,7 +393,6 @@ class History:
 
     def export(self, calc_history):
         Export(self, calc_history)
-
 
 class Export:
     def __init__(self, partner, calc_history):
@@ -519,7 +462,6 @@ class Export:
 
     def save_history(self, partner, calc_history):
 
-        global problem
         valid_char = "[A-Za-z0-9_]"
         has_error = "no"
 
@@ -560,12 +502,9 @@ class Export:
 
             self.close_export(partner)
 
-
 # main routine
 if __name__ == "__main__":
     root = Tk()
     root.title("Egyptian God Quiz")
     something = Start(root)
     root.mainloop()
-
-# Major thanks to yichen and woojin for helping me out with this project.
