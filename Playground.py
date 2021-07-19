@@ -241,7 +241,7 @@ class Game:
         # This color is black
         background_color = "black"
 
-        self.all_calc_list = []
+        self.all_calc_list = [self.result, self.rounds_played]
 
         # history Button (row 1)
         self.history_button = Button(self.help_stats_frame, text="Egyptian God Quiz Export", fg="yellow",
@@ -417,15 +417,7 @@ class History:
 
         # history Output goes here... (Row 2)
         # Generate string from list of calcualtions...
-        history_string = ""
-        if len(calc_history) >= 7:
-            for item in range(0, 7):
-                history_string += calc_history[lens(calc_history) - item - 1] + "\n"
-        else:
-            for item in calc_history:
-                history_string += calc_history[len(calc_history) -
-                                               calc_history.index(item) - 1] + "\n"
-                self.history_text.config(text="Here are your most recent calculations ", fg="yellow")
+        self.history_text.config(text="Here are your most recent calculations ", fg="yellow")
 
         # Export /Dismiss Buttons Frame (row 3)
         self.export_dismiss_frame = Frame(self.history_frame)
@@ -454,6 +446,9 @@ class History:
 class Export:
     def __init__(self, partner, calc_history):
         print(calc_history)
+
+        self.result = partner.result
+        self.rounds_played = partner.rounds_played
 
         # This color is black
         background = "black"
@@ -554,7 +549,7 @@ class Export:
             f = open(filename, "w+")
 
             for item in calc_history:
-                f.write(item + "\n")
+                f.write("You got {}/{} right. Congratulations !!\n".format(self.result, self.rounds_played))
 
             f.close()
 

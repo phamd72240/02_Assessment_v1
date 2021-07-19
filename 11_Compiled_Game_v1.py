@@ -7,21 +7,21 @@ import random
 class Start:
     def __init__(self, partner):
         # Start GUI
-        self.start_frame = Frame(padx=10, pady=10, bg="#D4E1F5")
+        self.start_frame = Frame(padx=10, pady=10, bg="black")
         self.start_frame.grid()
 
         # background
-        background = "#D4E1F5"
+        background = "black"
 
         # God Quiz Heading (row 0)
         self.egyptian_god_label = Label(self.start_frame, text="Egyptian Gods Quiz",
-                                        font="Arial 15 bold", bg="#D4E1F5")
+                                        font="Arial 15 bold", bg=background, fg="yellow")
         self.egyptian_god_label.grid(row=0)
 
         # Initial instructions (row 1)
         self.god_instructions_label = Label(self.start_frame, text=" Please choose the amount of "
                                                                    "question you want to answer",
-                                            font="Arial 12 italic", fg="black", bg=background)
+                                            font="Arial 12 italic", fg="yellow", bg=background)
         self.god_instructions_label.grid(row=1)
 
         # to_quiz button frame
@@ -36,22 +36,10 @@ class Start:
         button_font = "Oswald 40 bold"
 
         # Low Questions Button
-        self.low_level_button = Button(self.level_frame, text="10",
-                                       font=button_font, bg="#FF9933",
+        self.low_level_button = Button(self.level_frame, text="Play",
+                                       font=button_font, bg="black", fg="yellow",
                                        command=lambda: self.to_quiz(1))
         self.low_level_button.grid(row=5, column=0, pady=10, padx=5)
-
-        # Medium Questions Button
-        self.med_level_button = Button(self.level_frame, text="20",
-                                       font=button_font, bg="#FFFF33",
-                                       command=lambda: self.to_quiz(2))
-        self.med_level_button.grid(row=5, column=1, pady=10, padx=5)
-
-        # High Questions Button
-        self.high_level_button = Button(self.level_frame, text="30",
-                                        font=button_font, bg="#09FF33",
-                                        command=lambda: self.to_quiz(3))
-        self.high_level_button.grid(row=5, column=2, pady=10, padx=5)
 
         # Button frame for help and statistics (row 5)
         self.start_help_frame = Frame(self.start_frame, bg="#D4E1F5")
@@ -158,10 +146,10 @@ class Game:
 
         # Check
         if location == self.answer:
-            self.answer_label.config(text="Nice!!!", fg="#00FF00")
+            self.answer_label.config(text="Nice!!!", fg="dark green")
             self.result += 1
         else:
-            self.answer_label.config(text="Maybe Next Time??", fg="#0000FF")
+            self.answer_label.config(text="Maybe Next Time??", fg="blue")
 
         # refreshed result after right or wrong
         self.result_label.config(text="{} correct / {} rounds played".format(self.result, self.rounds_played))
