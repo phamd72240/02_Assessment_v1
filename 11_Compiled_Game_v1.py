@@ -2,6 +2,7 @@ from tkinter import *
 from functools import partial  # Prevent unwanted windows
 import csv
 import random
+import re
 
 
 class Start:
@@ -121,7 +122,8 @@ class Game:
         self.result_label.grid(row=4, column=0)
 
         # Next button
-        self.next_button = Button(self.game_box, width=15, height=1, text="next", background="black", fg="yellow",
+        self.next_button = Button(self.game_box, width=20, height=1, text="next",
+                                  background="black", fg="yellow", font="Arial 14 bold",
                                   command=lambda: self.to_next(my_list))
         self.next_button.grid(row=6, column=0, pady=10)
 
@@ -255,7 +257,7 @@ class Game:
 
     def to_stats(self):
         get_stats = Stats(self)
-        get_stats.stats_text.configure(text="This is your statistics")
+        get_stats.stats_text.configure(text="These are your statistics")
 
 
 class Help:
@@ -340,13 +342,13 @@ class Stats:
                                   fg="yellow",
                                   font="arial" "10" "bold",
                                   command=partial(self.close_stats, partner))
-        self.dismiss_btn.grid(row=2, pady=10)
+        self.dismiss_btn.grid(row=4, pady=10)
 
         # Label for results
         self.result_label = Label(self.stats_frame, font="Arial 14 bold", fg="yellow", bg="black",
                                   text="{} correct / {} rounds played".format(self.result,
                                                                               self.rounds_played))
-        self.result_label.grid(row=4, column=0)
+        self.result_label.grid(row=2, column=0)
 
         # refreshed result after right or wrong
         self.result_label.config(text="{} correct / {} rounds played".format(self.result, self.rounds_played))
@@ -389,8 +391,8 @@ class History:
         self.how_heading.grid(row=0)
 
         # history text (label, row 1)
-        self.history_text = Label(self.history_frame, text="Here are your most recent calculations ", fg="yellow",
-
+        self.history_text = Label(self.history_frame, text="Here are your calculations in the most recent run.",
+                                  fg="yellow",
                                   justify=LEFT, width=40, bg=background, wrap=250, padx=10, pady=10)
         self.history_text.grid(row=1)
 
@@ -468,7 +470,7 @@ class Export:
         # Warning text (label, row2)
         self.export_text = Label(self.export_frame, text="If the filename you entered already exists,"
                                                          "it will be overwritten.", justify=LEFT, bg=background,
-                                 fg='red', font="Arial 10 italic",
+                                 fg='yellow', font="Arial 10 italic",
                                  wrap=225, padx=10, pady=10)
         self.export_text.grid(row=2, pady=10)
 
@@ -478,7 +480,7 @@ class Export:
         self.filename_entry.grid(row=3, pady=10)
 
         # Error Message Labels (initially blank, row 4)
-        self.save_error_label = Label(self.export_frame, text="", fg="maroon",
+        self.save_error_label = Label(self.export_frame, text="", fg="yellow",
                                       bg=background)
         self.save_error_label.grid(row=4)
 
@@ -552,3 +554,4 @@ if __name__ == "__main__":
     root.mainloop()
 
 # Major thanks to yichen and woojin for helping me out with this project.
+# Ms G as well since I received help and used loads of stuff from mystery box.

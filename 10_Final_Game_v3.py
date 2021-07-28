@@ -2,7 +2,7 @@ from tkinter import *
 from functools import partial # Prevent unwanted windows
 import csv
 import random
-
+import re
 
 class Start:
     def __init__(self, partner):
