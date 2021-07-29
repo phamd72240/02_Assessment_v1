@@ -291,7 +291,7 @@ class Help:
         # Dismiss button (row 2)
         self.dismiss_btn = Button(self.help_frame, text="Dismiss", width=10, bg="black",
                                   fg="yellow",
-                                  font="arial" "10" "bold",
+                                  font="arial 13 bold",
                                   command=partial(self.close_help, partner))
         self.dismiss_btn.grid(row=2, pady=10)
 
@@ -340,7 +340,7 @@ class Stats:
         # Dismiss button (row 2)
         self.dismiss_btn = Button(self.stats_frame, text="Dismiss", width=10, bg="black",
                                   fg="yellow",
-                                  font="arial" "10" "bold",
+                                  font="Arial 13 bold",
                                   command=partial(self.close_stats, partner))
         self.dismiss_btn.grid(row=4, pady=10)
 
@@ -400,7 +400,7 @@ class History:
         self.result_label = Label(self.history_frame, font="Arial 14 bold", fg="yellow", bg="black",
                                   text="{} correct / {} rounds played".format(self.result,
                                                                               self.rounds_played))
-        self.result_label.grid(row=4, column=0)
+        self.result_label.grid(row=2, column=0)
 
         # refreshed result after right or wrong
         self.result_label.config(text="{} correct / {} rounds played".format(self.result, self.rounds_played))
